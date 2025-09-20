@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="img/flowers.png" type="image/x-icon">
     <title>Un Regalo Para Yenifer</title>
     <style>
+        /* Estilos base y reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+        
         /* Estilos para la caja de regalo */
         .gift-container {
             position: fixed;
@@ -24,8 +37,8 @@
         }
         
         .gift-box {
-            width: 300px;
-            height: 300px;
+            width: 280px;
+            height: 280px;
             background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 100%);
             border-radius: 10px;
             position: relative;
@@ -57,12 +70,14 @@
         
         .gift-lid {
             position: absolute;
-            width: 320px;
+            width: 300px;
             height: 40px;
             background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             top: -40px;
             border-radius: 10px 10px 0 0;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         .gift-bow {
@@ -103,11 +118,14 @@
             font-family: 'Arial', sans-serif;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
             z-index: 2;
+            width: 100%;
+            padding: 0 10px;
         }
         
         .gift-text h1 {
             font-size: 24px;
             margin-bottom: 15px;
+            word-wrap: break-word;
         }
         
         .gift-text p {
@@ -121,7 +139,7 @@
             100% { transform: scale(1); }
         }
         
-         /* MODIFICACIONES PARA RESPONSIVE */
+        /* MODIFICACIONES PARA RESPONSIVE */
         .typewriter-container {
             position: absolute;
             top: 20px;
@@ -241,6 +259,7 @@
         .flowers, .night {
             opacity: 0;
             transition: opacity 2s ease;
+            overflow: hidden;
         }
         
         /* Ajustes específicos para móviles */
@@ -270,6 +289,19 @@
             
             .gift-text p {
                 font-size: 16px;
+            }
+            
+            .gift-bow::before,
+            .gift-bow::after {
+                width: 70px;
+            }
+            
+            .gift-bow::before {
+                left: -60px;
+            }
+            
+            .gift-bow::after {
+                right: -60px;
             }
         }
         
@@ -310,11 +342,11 @@
             }
             
             .gift-bow::before {
-                left: -55px;
+                left: -50px;
             }
             
             .gift-bow::after {
-                right: -55px;
+                right: -50px;
             }
             
             .gift-text h1 {
@@ -372,6 +404,19 @@
                 height: 100px;
                 bottom: 20px;
             }
+            
+            .gift-bow::before,
+            .gift-bow::after {
+                width: 50px;
+            }
+            
+            .gift-bow::before {
+                left: -45px;
+            }
+            
+            .gift-bow::after {
+                right: -45px;
+            }
         }
         
         /* Ajustes para orientación horizontal en móviles */
@@ -390,6 +435,10 @@
                 bottom: 10px;
                 width: 100px;
                 height: 100px;
+            }
+            
+            .typewriter-text {
+                font-size: 16px;
             }
         }
     </style>
@@ -758,6 +807,16 @@
         
         // Agregar evento de clic a la caja de regalo
         document.getElementById('giftBox').addEventListener('click', openGift);
+        
+        // Prevenir zoom en entrada doble-tap en dispositivos móviles
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
