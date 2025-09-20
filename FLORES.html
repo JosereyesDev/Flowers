@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="img/flowers.png" type="image/x-icon">
+    <title>Un Regalo Para Yenifer</title>
+    <style>
+        /* Estilos para la caja de regalo */
+        .gift-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        .gift-box {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #c0392b 100%);
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            top: -10px;
+            border-radius: 5px;
+        }
+        
+        .gift-lid {
+            position: absolute;
+            width: 320px;
+            height: 40px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            top: -40px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gift-bow {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #ff5252;
+            border-radius: 50%;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gift-bow::before,
+        .gift-bow::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 30px;
+            background: #ff5252;
+            border-radius: 50%;
+            top: 15px;
+        }
+        
+        .gift-bow::before {
+            left: -70px;
+            transform: rotate(-45deg);
+        }
+        
+        .gift-bow::after {
+            right: -70px;
+            transform: rotate(45deg);
+        }
+        
+        .gift-text {
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        
+        .gift-text h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .gift-text p {
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+         /* MODIFICACIONES PARA RESPONSIVE */
+        .typewriter-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            width: 90%;
+            max-width: 800px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            padding: 15px; /* Añadido para espacio interno */
+            background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra */
+        }
+        
+        .typewriter-text {
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 25px;
+            overflow: hidden;
+            border-right: 3px solid #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            animation: blink 1s step-end infinite;
+            /* Cambios importantes: */
+            white-space: normal; /* Permite saltos de línea */
+            word-wrap: break-word; /* Rompe palabras largas */
+            display: inline-block; /* Mejor control del texto */
+            text-align: center; /* Centrado */
+            width: 100%; /* Ocupa todo el ancho */
+            line-height: 1.4; /* Mejor espaciado entre líneas */
+        }
+        
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #FFD700; }
+        }
+        
+        /* Estilos para la foto de pareja */
+        .photo-container {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            opacity: 0;
+            transition: opacity 2s ease;
+            z-index: 99;
+            perspective: 1000px;
+        }
+        
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 10px solid #fff;
+            background: #fff;
+        }
+        
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,215,0,0.2) 0%, rgba(255,140,0,0.2) 100%);
+            z-index: 2;
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+            transition: transform 1s ease;
+        }
+        
+        .photo-heart {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 60px;
+            height: 60px;
+            background: #ff5252;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            z-index: 3;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(1deg); }
+            50% { transform: translateY(-15px) rotate(-1deg); }
+            100% { transform: translateY(0px) rotate(1deg); }
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+            90% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Ocultar inicialmente las flores */
+        .flowers, .night {
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        
+        /* Ajustes específicos para móviles */
+        @media (max-width: 768px) {
+            .typewriter-text {
+                font-size: 22px; /* Tamaño más adecuado para tablets */
+            }
+            
+            .typewriter-container {
+                top: 15px;
+                width: 85%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .typewriter-text {
+                font-size: 18px; /* Tamaño ideal para móviles */
+                white-space: normal; /* Aseguramos que permita saltos */
+            }
+            
+            .typewriter-container {
+                top: 10px;
+                width: 90%;
+                padding: 12px;
+            }
+            
+            .gift-box {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .gift-lid {
+                width: 220px;
+            }
+            
+            .gift-text h1 {
+                font-size: 18px;
+            }
+            
+            .gift-text p {
+                font-size: 14px;
+            }
+            
+            .photo-container {
+                width: 120px; /* Ajustado para móviles */
+                height: 120px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="container">
+    <!-- Audio (oculto inicialmente) -->
+    <audio id="background-music" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    
+    <!-- Contenedor de regalo -->
+    <div class="gift-container" id="giftContainer">
+        <div class="gift-box" id="giftBox">
+            <div class="gift-lid"></div>
+            <div class="gift-bow"></div>
+            <div class="gift-text">
+                <h1>Para Yenifer</h1>
+                <p>Abrir Aquí</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contenedor para el texto de máquina de escribir -->
+    <div class="typewriter-container" id="typewriterContainer">
+        <h1 id="typewriter" class="typewriter-text"></h1>
+    </div>
+    
+    <!-- Contenedor para la foto de pareja -->
+    <div class="photo-container" id="photoContainer">
+        <div class="photo-frame">
+            <img src="img/imagen.jpg" alt="Yenifer y yo" id="couplePhoto">
+            <div class="photo-heart">❤️</div>
+        </div>
+    </div>
+    
+    <!-- Contenedor de flores (oculto inicialmente) -->
+    <div class="night"></div>
+    <div class="flowers">
+      <div class="flower flower--1">
+        <div class="flower__leafs flower__leafs--1">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+          <div class="flower__line__leaf flower__line__leaf--5"></div>
+          <div class="flower__line__leaf flower__line__leaf--6"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--2">
+        <div class="flower__leafs flower__leafs--2">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--3">
+        <div class="flower__leafs flower__leafs--3">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+
+      <!-- Nueva flor añadida -->
+      <div class="flower flower--4">
+        <div class="flower__leafs flower__leafs--4">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+  
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:1.2s">
+        <div class="flower__g-long">
+          <div class="flower__g-long__top"></div>
+          <div class="flower__g-long__bottom"></div>
+        </div>
+      </div>
+  
+      <div class="growing-grass">
+        <div class="flower__grass flower__grass--1">
+          <div class="flower__grass--top"></div>
+          <div class="flower__grass--bottom"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
+          <div class="flower__grass__overlay"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:3.2s">
+        <div class="flower__g-fr">
+          <div class="leaf"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--1"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--2"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--3"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--4"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--5"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--6"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--7"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--8"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--0">
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:2.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--1">
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.8s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--2">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.4s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--3">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--4">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--5">
+        <div class="grow-ans" style="--d:4s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--6">
+        <div class="grow-ans" style="--d:4.2s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.4s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.6s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:4.8s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--7">
+        <div class="grow-ans" style="--d:3s">
+          <div class="leaf leaf--0"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.2s">
+          <div class="leaf leaf--1"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.5s">
+          <div class="leaf leaf--2"></div>
+        </div>
+        <div class="grow-ans" style="--d:3.6s">
+          <div class="leaf leaf--3"></div>
+        </div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+    <script>
+        // Script para el efecto de máquina de escribir
+        function typeWriter(text, element, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Una vez completado, mantener el cursor parpadeando
+                    element.style.animation = 'blink 1s step-end infinite';
+                }
+            }
+            
+            type();
+        }
+        
+        // Función para abrir el regalo
+        function openGift() {
+            const giftContainer = document.getElementById('giftContainer');
+            const typewriterContainer = document.getElementById('typewriterContainer');
+            const photoContainer = document.getElementById('photoContainer');
+            const flowers = document.querySelector('.flowers');
+            const night = document.querySelector('.night');
+            const backgroundMusic = document.getElementById('background-music');
+            
+            // Ocultar la caja de regalo
+            giftContainer.style.opacity = '0';
+            
+            // Después de la transición, ocultar completamente
+            setTimeout(() => {
+                giftContainer.style.display = 'none';
+                
+                // Mostrar el texto de máquina de escribir
+                typewriterContainer.style.opacity = '1';
+                
+                // Mostrar las flores
+                flowers.style.opacity = '1';
+                night.style.opacity = '1';
+                
+                // Mostrar la foto después de un breve retraso
+                setTimeout(() => {
+                    photoContainer.style.opacity = '1';
+                }, 2000);
+                
+                // Iniciar la animación de escritura
+                const typewriterElement = document.getElementById('typewriter');
+                const text = "Más Hermosa que las flores amarillas eres tú ❤️";
+                typeWriter(text, typewriterElement, 100);
+                
+                // Reproducir música
+                backgroundMusic.play().catch(error => {
+                    console.log('Reproducción automática prevenida:', error);
+                    // En caso de que falle la reproducción automática, mostrar un mensaje
+                    alert('Por favor, haz clic en cualquier parte de la página para iniciar la música');
+                    document.body.addEventListener('click', function() {
+                        backgroundMusic.play();
+                    }, { once: true });
+                });
+            }, 1000);
+        }
+        
+        // Agregar evento de clic a la caja de regalo
+        document.getElementById('giftBox').addEventListener('click', openGift);
+    </script>
+</body>
+</html>
